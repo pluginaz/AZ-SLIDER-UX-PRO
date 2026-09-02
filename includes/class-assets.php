@@ -23,7 +23,9 @@ class AZSUX_Assets {
      */
     public static function init() {
         add_action( "wp_enqueue_scripts", array( __CLASS__, "register_frontend_assets" ) );
+        add_action( "wp_enqueue_scripts", array( __CLASS__, "check_and_enqueue_for_builder" ), 20 );
         add_action( "admin_enqueue_scripts", array( __CLASS__, "enqueue_admin_assets" ) );
+        add_action( "ux_builder_enqueue_scripts", array( __CLASS__, "enqueue_ux_builder_assets" ), 20 );
     }
 
     /**
@@ -74,10 +76,6 @@ class AZSUX_Assets {
      * Force enqueue frontend assets when renderer runs
      */
     public static function enqueue_frontend() {
-        if ( self::$frontend_enqueued ) {
-            return;
-        }
-
         self::register_frontend_assets();
         wp_enqueue_style( "dashicons" );
         wp_enqueue_style( "azsux-frontend-style" );
@@ -88,6 +86,22 @@ class AZSUX_Assets {
     }
 
     /**
+     * Check if in UX Builder during normal wp_enqueue_scripts and enqueue
+     */
+    public static function check_and_enqueue_for_builder() {
+        if ( AZSUX_Helpers::is_ux_builder() ) {
+            self::enqueue_frontend();
+        }
+    }
+
+    /**
+     * Enqueue assets specifically inside UX Builder
+     */
+    public static function enqueue_ux_builder_assets( $context = "" ) {
+        self::enqueue_frontend();
+    }
+
+    /**
      * Enqueue Admin Assets on az_slider screen
      *
      * @param string $hook
@@ -95,7 +109,12 @@ class AZSUX_Assets {
     public static function enqueue_admin_assets( $hook ) {
         global $post_type;
 
-        if ( "az_slider" !== $post_type && false === strpos( $hook, "azsux" ) ) {
+        // Also enqueue frontend assets if on UX Builder screen in admin
+        if ( AZSUX_Helpers::is_ux_builder() ) {
+            self::enqueue_frontend();
+        }
+
+        if ( "az_slider" !== $post_type && false === strpos( (string) $hook, "azsux" ) ) {
             return;
         }
 

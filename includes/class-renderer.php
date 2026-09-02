@@ -21,13 +21,13 @@ class AZSUX_Renderer {
     public static function render( $slider_id, $overrides = array() ) {
         $slider_id = absint( $slider_id );
 
-        // If ID is missing or 0, fallback to default demo slider in UX Builder
+        // If ID is missing or 0, fallback to default demo slider in UX Builder or frontend
         if ( ! $slider_id ) {
             $default_id = AZSUX_Helpers::ensure_default_slider_exists();
             if ( $default_id ) {
                 $slider_id = $default_id;
             } else {
-                if ( ( function_exists( "ux_builder_is_active" ) && ux_builder_is_active() ) || is_admin() ) {
+                if ( AZSUX_Helpers::is_ux_builder() || is_admin() ) {
                     return self::render_placeholder();
                 }
                 return '<!-- Az Slider UX Pro: Invalid Slider ID -->';
@@ -57,7 +57,7 @@ class AZSUX_Renderer {
      */
     protected static function render_accordion_showcase( $slider_id, $settings ) {
         if ( empty( $settings["items"] ) ) {
-            if ( ( function_exists( "ux_builder_is_active" ) && ux_builder_is_active() ) || is_admin() ) {
+            if ( AZSUX_Helpers::is_ux_builder() || is_admin() ) {
                 return self::render_placeholder();
             }
             return '<!-- Az Slider UX Pro: No Items Configured -->';
@@ -143,7 +143,7 @@ class AZSUX_Renderer {
                     break;
                 case 'image':
                     if ( ! empty( $settings["bg_image"] ) ) {
-                        $bg_css = 'background-image: url("' . esc_url( $settings["bg_image"] ) . '"); background-size: cover; background-position: center;';
+                        $bg_css = 'background-image: url(\'' . esc_url( $settings["bg_image"] ) . '\'); background-size: cover; background-position: center;';
                     } else {
                         $bg_css = 'background-color: ' . esc_attr( $settings["bg_color"] ) . ';';
                     }
@@ -161,11 +161,21 @@ class AZSUX_Renderer {
         $azsux_instance_id = $instance_id;
         $azsux_data_html   = $data_html;
         $azsux_style_attr  = $style_attr;
-        $azsux_items       = $settings['items'] ?? array();
         $azsux_active_idx  = $active_idx;
 
         ob_start();
+        
+        // In UX Builder or AJAX rendering, ensure stylesheet links and auto-init script are present
+        if ( AZSUX_Helpers::is_ux_builder() ) {
+            echo '<link rel="stylesheet" href="' . esc_url( AZSUX_URL . 'public/css/frontend.css?ver=' . AZSUX_VERSION ) . '" />';
+        }
+
         include AZSUX_PATH . "templates/slider.php";
+
+        if ( AZSUX_Helpers::is_ux_builder() ) {
+            echo '<script>if(window.AZSliderUX && window.AZSliderUX.initAll){window.AZSliderUX.initAll();}</script>';
+        }
+
         return ob_get_clean();
     }
 
@@ -177,32 +187,34 @@ class AZSUX_Renderer {
      * @return string
      */
     protected static function render_blog_showcase( $slider_id, $settings ) {
-        $azsux_posts = AZSUX_Blog_Query::get_posts( $settings );
-        $azsux_blog  = isset( $settings['blog'] ) && is_array( $settings['blog'] ) ? $settings['blog'] : AZSUX_Helpers::get_default_blog_settings();
+        $azsux_blog = $settings['blog'] ?? array();
+        $query_args = AZSUX_Blog_Query::build_query_args( $azsux_blog );
+        $posts_res  = AZSUX_Blog_Query::query_posts( $query_args );
 
-        if ( empty( $azsux_posts ) ) {
-            if ( ( function_exists( "ux_builder_is_active" ) && ux_builder_is_active() ) || is_admin() ) {
-                return self::render_placeholder( __( "Không tìm thấy bài viết nào phù hợp với cấu hình Query Blog.", "az-slider-ux-pro" ) );
+        if ( empty( $posts_res['posts'] ) ) {
+            if ( AZSUX_Helpers::is_ux_builder() || is_admin() ) {
+                return self::render_placeholder( __( 'Không tìm thấy bài viết nào phù hợp với bộ lọc danh mục/thẻ đã chọn trong Cài đặt Blog Showcase.', 'az-slider-ux-pro' ) );
             }
             return '<!-- Az Slider UX Pro: No Blog Posts Found -->';
         }
 
+        // Trigger asset enqueuing.
         AZSUX_Assets::enqueue_frontend();
 
-        $instance_id = AZSUX_Helpers::generate_instance_id( $slider_id );
-        $total_cards = count( $azsux_posts );
-        $active_idx  = AZSUX_Sanitizer::clamp_int( $settings['active_item_index'] ?? 0, 0, max( 0, $total_cards - 1 ), 0 );
+        $azsux_posts       = $posts_res['posts'];
+        $total_cards       = count( $azsux_posts );
+        $instance_id       = AZSUX_Helpers::generate_instance_id( $slider_id );
+        $active_idx        = AZSUX_Sanitizer::clamp_int( $settings['active_item_index'] ?? 0, 0, max( 0, $total_cards - 1 ), 0 );
 
         $data_attrs = array(
             'data-instance'        => esc_attr( $instance_id ),
             'data-layout'          => 'blog-showcase',
-            'data-fan-preset'      => esc_attr( $azsux_blog['fan_preset'] ?? 'editorial-fan' ),
             'data-visible-desktop' => esc_attr( $azsux_blog['visible_desktop'] ?? 7 ),
             'data-visible-tablet'  => esc_attr( $azsux_blog['visible_tablet'] ?? 5 ),
             'data-visible-mobile'  => esc_attr( $azsux_blog['visible_mobile'] ?? 3 ),
             'data-loop'            => ! empty( $azsux_blog['loop'] ) ? 'true' : 'false',
-            'data-side-click'      => esc_attr( $azsux_blog['side_click'] ?? 'activate' ),
-            'data-active-click'    => esc_attr( $azsux_blog['active_click'] ?? 'open_post' ),
+            'data-side-click'      => esc_attr( $azsux_blog['side_card_click'] ?? 'activate' ),
+            'data-active-click'    => esc_attr( $azsux_blog['active_card_click'] ?? 'open_post' ),
             'data-swipe'           => ! empty( $azsux_blog['swipe'] ) ? 'true' : 'false',
             'data-keyboard'        => ! empty( $azsux_blog['keyboard'] ) ? 'true' : 'false',
             'data-autoplay'        => ! empty( $azsux_blog['autoplay'] ) ? 'true' : 'false',
@@ -254,7 +266,7 @@ class AZSUX_Renderer {
                 break;
             case 'image':
                 if ( ! empty( $settings["bg_image"] ) ) {
-                    $bg_css = 'background-image: url("' . esc_url( $settings["bg_image"] ) . '"); background-size: cover; background-position: center;';
+                    $bg_css = 'background-image: url(\'' . esc_url( $settings["bg_image"] ) . '\'); background-size: cover; background-position: center;';
                 } else {
                     $bg_css = 'background-color: ' . esc_attr( $settings["bg_color"] ) . ';';
                 }
@@ -274,7 +286,19 @@ class AZSUX_Renderer {
         $azsux_active_idx  = $active_idx;
 
         ob_start();
+        
+        // In UX Builder or AJAX rendering, ensure stylesheet links and auto-init script are present
+        if ( AZSUX_Helpers::is_ux_builder() ) {
+            echo '<link rel="stylesheet" href="' . esc_url( AZSUX_URL . 'public/css/frontend.css?ver=' . AZSUX_VERSION ) . '" />';
+            echo '<link rel="stylesheet" href="' . esc_url( AZSUX_URL . 'public/css/blog-showcase.css?ver=' . AZSUX_VERSION ) . '" />';
+        }
+
         include AZSUX_PATH . "templates/blog-showcase.php";
+
+        if ( AZSUX_Helpers::is_ux_builder() ) {
+            echo '<script>if(window.AZBlogShowcase && window.AZBlogShowcase.initAll){window.AZBlogShowcase.initAll();}</script>';
+        }
+
         return ob_get_clean();
     }
 
@@ -289,7 +313,8 @@ class AZSUX_Renderer {
             $message = __( "Vui lòng chọn <strong>Slider</strong> từ danh sách dropdown ở bảng điều khiển bên trái.", "az-slider-ux-pro" );
         }
 
-        return '<div class="azsux-builder-placeholder" style="padding: 40px 20px; background: #0f172a; color: #ffffff; border-radius: 16px; text-align: center; border: 2px dashed #854f2e; margin: 15px 0;">' .
+        return '<div class="azsux-builder-placeholder" style="padding: 40px 20px; background: #0f172a; color: #ffffff; border-radius: 16px; text-align: center; border: 2px dashed #854f2e; margin: 15px 0; font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, sans-serif;">' .
+               '<div style="font-size: 32px; margin-bottom: 8px;">✨</div>' .
                '<h3 style="margin: 0 0 10px 0; color: #ffffff; font-size: 20px; font-weight: 700;">Az Slider UX Pro</h3>' .
                '<p style="margin: 0; color: #cbd5e1; font-size: 14px;">' . $message . '</p>' .
                '</div>';

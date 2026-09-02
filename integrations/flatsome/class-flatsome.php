@@ -65,10 +65,19 @@ class AZSUX_Flatsome {
 
         $registered = true;
 
-        add_ux_builder_shortcode( "az_slider_ux", array(
+        $element_config = array(
             "name"      => __( "Az Slider UX Pro", "az-slider-ux-pro" ),
             "category"  => __( "Content", "az-slider-ux-pro" ),
             "thumbnail" => AZSUX_URL . "assets/images/ux-thumbnail.svg",
+            "scripts"   => array(
+                "azsux-frontend-script"      => AZSUX_URL . "public/js/frontend.js",
+                "azsux-blog-showcase-script" => AZSUX_URL . "public/js/blog-showcase.js",
+            ),
+            "styles"    => array(
+                "dashicons"                  => includes_url( "css/dashicons.min.css" ),
+                "azsux-frontend-style"       => AZSUX_URL . "public/css/frontend.css",
+                "azsux-blog-showcase-style"  => AZSUX_URL . "public/css/blog-showcase.css",
+            ),
             "options"   => array(
                 "id" => array(
                     "type"       => "select",
@@ -87,6 +96,9 @@ class AZSUX_Flatsome {
                     ),
                 ),
             ),
-        ) );
+        );
+
+        add_ux_builder_shortcode( "az_slider_ux", $element_config );
+        add_ux_builder_shortcode( "az_slider_ux_pro", $element_config );
     }
 }

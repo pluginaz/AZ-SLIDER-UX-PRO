@@ -6,7 +6,12 @@
     "use strict";
 
     function initAZSlider(container) {
-        if (!container || container.dataset.azsuxInitialized === "true") {
+        if (!container) {
+            return;
+        }
+
+        // Avoid re-binding if already initialized on same DOM items
+        if (container.dataset.azsuxInitialized === "true") {
             return;
         }
         container.dataset.azsuxInitialized = "true";
@@ -23,6 +28,9 @@
         }
 
         var activeIndex = parseInt(container.getAttribute("data-active-index") || "0", 10);
+        if (isNaN(activeIndex) || activeIndex < 0 || activeIndex >= items.length) {
+            activeIndex = 0;
+        }
         var timer = null;
         var isPaused = false;
 
@@ -57,6 +65,7 @@
         function updateContentBox(data) {
             if (!contentBox) return;
 
+            var badgeWrapEl = contentBox.querySelector(".azsux-badge-wrap");
             var badgeEl = contentBox.querySelector(".azsux-badge");
             var titleEl = contentBox.querySelector(".azsux-title");
             var descEl = contentBox.querySelector(".azsux-description");
@@ -64,7 +73,9 @@
 
             if (badgeEl) {
                 badgeEl.textContent = data.badge || "";
-                badgeEl.parentElement.style.display = data.badge ? "block" : "none";
+                if (badgeWrapEl) {
+                    badgeWrapEl.style.display = data.badge ? "block" : "none";
+                }
             }
 
             if (titleEl) {
@@ -116,7 +127,11 @@
         items.forEach(function (item, idx) {
             // Click Handler
             if (interaction === "click" || interaction === "hover-click") {
-                item.addEventListener("click", function () {
+                item.addEventListener("click", function (e) {
+                    // Do not block button clicks inside active card
+                    if (e.target.closest("a, button, input, select")) {
+                        return;
+                    }
                     setActiveItem(idx);
                 });
             }
@@ -187,21 +202,72 @@
         setActiveItem(activeIndex);
     }
 
-    // Auto-init all sliders on page load
-    document.addEventListener("DOMContentLoaded", function () {
-        var sliders = document.querySelectorAll(".azsux-slider-wrap");
-        sliders.forEach(function (slider) {
-            initAZSlider(slider);
-        });
-    });
-
     // Global API object for dynamically inserted sliders (e.g., UX Builder / AJAX)
     window.AZSliderUX = window.AZSliderUX || {};
     window.AZSliderUX.init = initAZSlider;
     window.AZSliderUX.initAll = function () {
-        var sliders = document.querySelectorAll(".azsux-slider-wrap");
+        var sliders = document.querySelectorAll(".azsux-slider-wrap:not(.azsux-layout-blog-showcase)");
         sliders.forEach(function (slider) {
             initAZSlider(slider);
         });
     };
+
+    // Auto-init all sliders on DOM ready / load
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        window.AZSliderUX.initAll();
+    } else {
+        document.addEventListener("DOMContentLoaded", function () {
+            window.AZSliderUX.initAll();
+        });
+    }
+
+    window.addEventListener("load", function () {
+        window.AZSliderUX.initAll();
+    });
+
+    // Support jQuery / Flatsome UX Builder events
+    if (typeof jQuery !== "undefined") {
+        jQuery(document).on("flatsome-slider-init uxb_init ux_builder_init ajaxComplete", function () {
+            window.AZSliderUX.initAll();
+        });
+    }
+
+    // DOM Mutation Observer for live builder environments (Flatsome UX Builder iframe)
+    if (typeof MutationObserver !== "undefined") {
+        var observer = new MutationObserver(function (mutations) {
+            var shouldInit = false;
+            for (var i = 0; i < mutations.length; i++) {
+                var m = mutations[i];
+                if (m.addedNodes && m.addedNodes.length > 0) {
+                    for (var j = 0; j < m.addedNodes.length; j++) {
+                        var node = m.addedNodes[j];
+                        if (node.nodeType === 1) {
+                            if (node.classList && node.classList.contains("azsux-slider-wrap") && !node.classList.contains("azsux-layout-blog-showcase")) {
+                                shouldInit = true;
+                                break;
+                            }
+                            if (node.querySelector && node.querySelector(".azsux-slider-wrap:not(.azsux-layout-blog-showcase)")) {
+                                shouldInit = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (shouldInit) break;
+            }
+            if (shouldInit) {
+                window.AZSliderUX.initAll();
+            }
+        });
+
+        if (document.body) {
+            observer.observe(document.body, { childList: true, subtree: true });
+        } else {
+            document.addEventListener("DOMContentLoaded", function () {
+                if (document.body) {
+                    observer.observe(document.body, { childList: true, subtree: true });
+                }
+            });
+        }
+    }
 })();

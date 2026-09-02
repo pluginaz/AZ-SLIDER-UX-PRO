@@ -6,7 +6,11 @@
     "use strict";
 
     function initAZBlogShowcase(container) {
-        if (!container || container.dataset.azsuxBlogInitialized === "true") {
+        if (!container) {
+            return;
+        }
+
+        if (container.dataset.azsuxBlogInitialized === "true") {
             return;
         }
         container.dataset.azsuxBlogInitialized = "true";
@@ -18,7 +22,7 @@
 
         var total = cards.length;
         var activeIndex = parseInt(container.getAttribute("data-active-index") || "0", 10);
-        if (activeIndex < 0 || activeIndex >= total) {
+        if (isNaN(activeIndex) || activeIndex < 0 || activeIndex >= total) {
             activeIndex = 0;
         }
 
@@ -228,15 +232,76 @@
         updatePositions();
     }
 
-    // Auto-init all blog showcase instances on DOM ready
-    document.addEventListener("DOMContentLoaded", function () {
+    // Global API hook
+    window.AZBlogShowcase = window.AZBlogShowcase || {};
+    window.AZBlogShowcase.init = initAZBlogShowcase;
+    window.AZBlogShowcase.initAll = function () {
         var sliders = document.querySelectorAll(".azsux-layout-blog-showcase");
         sliders.forEach(function (slider) {
             initAZBlogShowcase(slider);
         });
-    });
+    };
 
-    // Global API hook
     window.AZSliderUX = window.AZSliderUX || {};
     window.AZSliderUX.initBlog = initAZBlogShowcase;
+    window.AZSliderUX.initAllBlog = window.AZBlogShowcase.initAll;
+
+    // Auto-init all blog showcase instances on DOM ready / load
+    if (document.readyState === "complete" || document.readyState === "interactive") {
+        window.AZBlogShowcase.initAll();
+    } else {
+        document.addEventListener("DOMContentLoaded", function () {
+            window.AZBlogShowcase.initAll();
+        });
+    }
+
+    window.addEventListener("load", function () {
+        window.AZBlogShowcase.initAll();
+    });
+
+    // Support jQuery / Flatsome UX Builder events
+    if (typeof jQuery !== "undefined") {
+        jQuery(document).on("flatsome-slider-init uxb_init ux_builder_init ajaxComplete", function () {
+            window.AZBlogShowcase.initAll();
+        });
+    }
+
+    // DOM Mutation Observer for live builder environments
+    if (typeof MutationObserver !== "undefined") {
+        var observer = new MutationObserver(function (mutations) {
+            var shouldInit = false;
+            for (var i = 0; i < mutations.length; i++) {
+                var m = mutations[i];
+                if (m.addedNodes && m.addedNodes.length > 0) {
+                    for (var j = 0; j < m.addedNodes.length; j++) {
+                        var node = m.addedNodes[j];
+                        if (node.nodeType === 1) {
+                            if (node.classList && node.classList.contains("azsux-layout-blog-showcase")) {
+                                shouldInit = true;
+                                break;
+                            }
+                            if (node.querySelector && node.querySelector(".azsux-layout-blog-showcase")) {
+                                shouldInit = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+                if (shouldInit) break;
+            }
+            if (shouldInit) {
+                window.AZBlogShowcase.initAll();
+            }
+        });
+
+        if (document.body) {
+            observer.observe(document.body, { childList: true, subtree: true });
+        } else {
+            document.addEventListener("DOMContentLoaded", function () {
+                if (document.body) {
+                    observer.observe(document.body, { childList: true, subtree: true });
+                }
+            });
+        }
+    }
 })();

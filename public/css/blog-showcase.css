@@ -426,3 +426,21 @@
         transform: translate(-50%, -50%) !important;
     }
 }
+/* Flatsome UX Builder Specific Compatibilities */
+.ux-builder-iframe .azsux-layout-blog-showcase,
+.ux-builder-active .azsux-layout-blog-showcase,
+.uxb-iframe .azsux-layout-blog-showcase {
+    display: flex !important;
+    width: 100% !important;
+    position: relative !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+.ux-builder-iframe .azsux-blog-stage,
+.ux-builder-active .azsux-blog-stage,
+.uxb-iframe .azsux-blog-stage {
+    display: flex !important;
+    position: relative !important;
+    width: 100% !important;
+}

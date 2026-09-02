@@ -26,20 +26,24 @@ class AZSUX_Shortcode {
      * @return string
      */
     public static function render_shortcode( $atts = array() ) {
-        $atts = shortcode_atts(
+        $raw_atts = is_array( $atts ) ? $atts : array();
+        $parsed_atts = shortcode_atts(
             array(
-                "id" => 0,
+                "id"              => 0,
+                "container_width" => "",
+                "slider_width"    => "",
             ),
-            $atts,
+            $raw_atts,
             "az_slider_ux"
         );
 
-        $slider_id = absint( $atts["id"] );
+        $slider_id = absint( $parsed_atts["id"] );
 
-        if ( ! $slider_id ) {
-            return '<!-- Az Slider UX Pro: ID parameter is required -->';
-        }
+        // Filter out empty override values so defaults from slider post meta aren't wiped
+        $overrides = array_filter( $parsed_atts, function( $v ) {
+            return "" !== $v && null !== $v;
+        } );
 
-        return AZSUX_Renderer::render( $slider_id );
+        return AZSUX_Renderer::render( $slider_id, $overrides );
     }
 }

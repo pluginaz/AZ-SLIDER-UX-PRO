@@ -311,4 +311,34 @@ class AZSUX_Helpers {
         $counter++;
         return "azsux-instance-" . absint( $slider_id ) . "-" . $counter . "-" . wp_rand( 100, 999 );
     }
+
+    /**
+     * Check if currently running in Flatsome UX Builder (editor or iframe preview)
+     *
+     * @return bool
+     */
+    public static function is_ux_builder() {
+        if ( function_exists( 'ux_builder_is_active' ) && ux_builder_is_active() ) {
+            return true;
+        }
+        if ( isset( $_GET['app'] ) && 'uxbuilder' === $_GET['app'] ) {
+            return true;
+        }
+        if ( isset( $_GET['uxb_iframe'] ) ) {
+            return true;
+        }
+        if ( defined( 'UX_BUILDER_AJAX_REQUEST' ) && UX_BUILDER_AJAX_REQUEST ) {
+            return true;
+        }
+        if ( defined( 'UX_BUILDER_DOING_AJAX' ) && UX_BUILDER_DOING_AJAX ) {
+            return true;
+        }
+        if ( isset( $_POST['action'] ) && 'ux_builder_do_shortcode' === $_POST['action'] ) {
+            return true;
+        }
+        if ( is_admin() && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && isset( $_GET['app'] ) ) {
+            return true;
+        }
+        return false;
+    }
 }
