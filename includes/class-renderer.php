@@ -164,11 +164,6 @@ class AZSUX_Renderer {
         $azsux_active_idx  = $active_idx;
 
         ob_start();
-        
-        // In UX Builder or AJAX rendering, ensure stylesheet links and auto-init script are present
-        if ( AZSUX_Helpers::is_ux_builder() ) {
-            echo '<link rel="stylesheet" href="' . esc_url( AZSUX_URL . 'public/css/frontend.css?ver=' . AZSUX_VERSION ) . '" />';
-        }
 
         include AZSUX_PATH . "templates/slider.php";
 
@@ -286,12 +281,6 @@ class AZSUX_Renderer {
         $azsux_active_idx  = $active_idx;
 
         ob_start();
-        
-        // In UX Builder or AJAX rendering, ensure stylesheet links and auto-init script are present
-        if ( AZSUX_Helpers::is_ux_builder() ) {
-            echo '<link rel="stylesheet" href="' . esc_url( AZSUX_URL . 'public/css/frontend.css?ver=' . AZSUX_VERSION ) . '" />';
-            echo '<link rel="stylesheet" href="' . esc_url( AZSUX_URL . 'public/css/blog-showcase.css?ver=' . AZSUX_VERSION ) . '" />';
-        }
 
         include AZSUX_PATH . "templates/blog-showcase.php";
 

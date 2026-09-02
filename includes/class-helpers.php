@@ -321,7 +321,8 @@ class AZSUX_Helpers {
         if ( function_exists( 'ux_builder_is_active' ) && ux_builder_is_active() ) {
             return true;
         }
-        if ( isset( $_GET['app'] ) && 'uxbuilder' === $_GET['app'] ) {
+        // phpcs:disable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
+        if ( isset( $_GET['app'] ) && 'uxbuilder' === sanitize_key( wp_unslash( $_GET['app'] ) ) ) {
             return true;
         }
         if ( isset( $_GET['uxb_iframe'] ) ) {
@@ -333,12 +334,13 @@ class AZSUX_Helpers {
         if ( defined( 'UX_BUILDER_DOING_AJAX' ) && UX_BUILDER_DOING_AJAX ) {
             return true;
         }
-        if ( isset( $_POST['action'] ) && 'ux_builder_do_shortcode' === $_POST['action'] ) {
+        if ( isset( $_POST['action'] ) && 'ux_builder_do_shortcode' === sanitize_key( wp_unslash( $_POST['action'] ) ) ) {
             return true;
         }
-        if ( is_admin() && isset( $_GET['action'] ) && 'edit' === $_GET['action'] && isset( $_GET['app'] ) ) {
+        if ( is_admin() && isset( $_GET['action'] ) && 'edit' === sanitize_key( wp_unslash( $_GET['action'] ) ) && isset( $_GET['app'] ) ) {
             return true;
         }
+        // phpcs:enable WordPress.Security.NonceVerification.Recommended, WordPress.Security.NonceVerification.Missing
         return false;
     }
 }
