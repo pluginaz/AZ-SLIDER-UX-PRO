@@ -1,4 +1,4 @@
-# Az Slider UX Pro (v1.0.2)
+# Az Slider UX Pro (v1.0.3)
 
 Plugin WordPress tạo slider accordion và blog showcase tương tác hiện đại, hỗ trợ toàn diện Flatsome UX Builder, shortcode và Gutenberg.
 

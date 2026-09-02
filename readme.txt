@@ -5,7 +5,7 @@ Tags: slider, accordion, showcase, flatsome, builder
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.2
+Stable tag: 1.0.3
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -51,6 +51,10 @@ No. The frontend engine runs on modern, lightweight Vanilla JavaScript for maxim
 
 == Changelog ==
 
+= 1.0.3 =
+* Resolved Plugin URI and Author URI differentiation requirement for official WordPress.org directory submission.
+* Refined assets packaging and clean SVN structure.
+
 = 1.0.2 =
 * Fixed Flatsome UX Builder live iframe preview, asset loading, and real-time element re-initialization.
 * Fixed method signature in AZSUX_Blog_Query (build_query_args, query_posts).
@@ -67,5 +71,5 @@ No. The frontend engine runs on modern, lightweight Vanilla JavaScript for maxim
 
 == Upgrade Notice ==
 
-= 1.0.2 =
-Version 1.0.2 includes full Flatsome UX Builder live preview compatibility, bug fixes, and WordPress.org standards compliance.
+= 1.0.3 =
+Version 1.0.3 updates header metadata and URI differentiation for full WordPress.org repository compliance.
