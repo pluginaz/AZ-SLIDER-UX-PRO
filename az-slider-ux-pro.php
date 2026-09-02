@@ -1,7 +1,7 @@
 <?php
 /**
  * Plugin Name:       Az Slider UX Pro
- * Plugin URI:        https://pluginaz.com
+ * Plugin URI:        https://pluginaz.com/az-slider-ux-pro/
  * Description:       Tạo slider accordion tương tác hiện đại, hỗ trợ UX Builder, shortcode, gradient, nội dung động và responsive.
  * Version:           1.0.2
  * Requires at least: 6.4
