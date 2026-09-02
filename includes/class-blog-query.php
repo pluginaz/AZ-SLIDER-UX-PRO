@@ -78,6 +78,7 @@ class AZSUX_Blog_Query {
         if ( ! empty( $blog_settings['exclude_current'] ) && is_singular() ) {
             $current_id = get_the_ID();
             if ( $current_id ) {
+                // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_post__not_in
                 $query_args['post__not_in'] = array( $current_id );
             }
         }
@@ -122,6 +123,7 @@ class AZSUX_Blog_Query {
         }
 
         if ( ! empty( $tax_query ) ) {
+            // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
             $query_args['tax_query'] = $tax_query;
         }
 
