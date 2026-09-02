@@ -1,0 +1,21 @@
+{
+  "$schema": "https://schemas.wp.org/trunk/block.json",
+  "apiVersion": 3,
+  "name": "az-slider-ux-pro/slider",
+  "version": "1.0.0",
+  "title": "Az Slider UX Pro",
+  "category": "media",
+  "icon": "slides",
+  "description": "Tạo slider accordion tương tác hiện đại.",
+  "supports": {
+    "html": false
+  },
+  "attributes": {
+    "sliderId": {
+      "type": "number",
+      "default": 0
+    }
+  },
+  "textdomain": "az-slider-ux-pro",
+  "editorScript": "file:./editor.js"
+}

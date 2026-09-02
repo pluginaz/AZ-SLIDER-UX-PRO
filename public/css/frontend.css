@@ -1,0 +1,398 @@
+/**
+ * Az Slider UX Pro Frontend Stylesheet
+ * Strictly scoped under .azsux-slider-wrap
+ */
+
+.azsux-slider-wrap {
+    position: relative;
+    width: 100%;
+    max-width: var(--azsux-slider-max-width, 100%);
+    margin: 0 auto;
+    min-height: var(--azsux-height, 550px);
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    align-items: stretch;
+    transition: background 0.3s ease;
+}
+
+.azsux-slider-wrap *,
+.azsux-slider-wrap *::before,
+.azsux-slider-wrap *::after {
+    box-sizing: border-box;
+}
+
+.azsux-container {
+    position: relative;
+    width: 100%;
+    max-width: var(--azsux-max-width, 1200px);
+    margin: 0 auto;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    z-index: 1;
+}
+
+.azsux-container.azsux-width-full {
+    max-width: 100% !important;
+}
+
+.azsux-bg-overlay-layer {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    pointer-events: none;
+}
+
+.azsux-split-layout {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    gap: var(--azsux-gap, 24px);
+    width: 100%;
+    align-items: stretch;
+}
+
+/* Content Box Styling */
+.azsux-content-box {
+    flex: 1 1 380px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    color: var(--azsux-title-color, #ffffff);
+    padding: 20px 10px;
+}
+
+.azsux-badge-wrap {
+    margin-bottom: 12px;
+}
+
+.azsux-badge {
+    display: inline-block;
+    padding: 6px 14px;
+    background-color: var(--azsux-badge-bg, #8a5331);
+    color: var(--azsux-badge-color, #ffffff);
+    font-size: 13px;
+    font-weight: 600;
+    border-radius: 10px;
+    letter-spacing: 0.5px;
+    text-transform: uppercase;
+    transition: all 0.3s ease;
+}
+
+.azsux-title {
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin: 0 0 16px 0;
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    background: linear-gradient(135deg, #ffffff 0%, hsl(22.67deg 44.55% 39.61%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    text-transform: uppercase;
+}
+
+.azsux-description {
+    font-size: 16px;
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+    color: var(--azsux-desc-color, #cbd5e1);
+    transition: opacity 0.3s ease;
+}
+
+.azsux-buttons-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    align-items: center;
+}
+
+/* Button Component */
+.azsux-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none !important;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    line-height: 1;
+}
+
+.azsux-btn-primary {
+    background-color: var(--azsux-badge-bg, #8a5331);
+    color: #ffffff;
+    border: 1px solid transparent;
+}
+
+.azsux-btn-primary:hover {
+    filter: brightness(1.15);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.35);
+}
+
+.azsux-btn-secondary {
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #ffffff !important;
+    backdrop-filter: blur(8px) !important; 
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+}
+
+.azsux-btn-secondary:hover {
+    background-color: rgba(255, 255, 255, 0.25);
+    transform: translateY(-2px);
+}
+
+.azsux-btn-outline {
+    background-color: transparent;
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.4);
+}
+
+.azsux-btn-outline:hover {
+    border-color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.1);
+    transform: translateY(-2px);
+}
+
+.azsux-btn-link {
+    background-color: transparent;
+    color: var(--azsux-badge-bg, #8a5331);
+    padding: 12px 12px;
+}
+
+.azsux-btn-link:hover {
+    text-decoration: underline !important;
+}
+
+.azsux-btn-badge {
+    position: absolute;
+    margin-top: -40px;
+    background: linear-gradient(135deg, #ff5e3a, #ff2a6d);
+    color: #fff;
+    font-size: .6rem;
+    padding: 2px 7px;
+    border-radius: 100px;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    box-shadow: 0 3px 8px rgba(255, 42, 109, .35);
+    z-index: 10;
+    pointer-events: none;
+    border: 1px solid rgba(255, 255, 255, .2);
+    line-height: 1;
+}
+
+/* Accordion Wrapper Styling */
+.azsux-accordion-wrapper {
+    flex: 2 1 500px;
+    display: flex;
+    gap: var(--azsux-gap, 16px);
+    min-height: 400px;
+}
+
+/* Accordion Single Item Card */
+.azsux-accordion-item {
+    position: relative;
+    flex: 1 1 80px;
+    min-width: 60px;
+    border-radius: calc(var(--azsux-radius, 16px) - 4px);
+    overflow: hidden;
+    cursor: pointer;
+    transition: flex 0.45s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    background-color: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    outline: none;
+}
+
+.azsux-accordion-item:focus-visible {
+    outline: 3px solid #8a5331;
+    outline-offset: 2px;
+}
+
+.azsux-accordion-item.azsux-active {
+    flex: 3.5 1 320px;
+    cursor: default;
+    border-color: hsl(22.67deg 100% 79.38% / 29%);
+    box-shadow: 0 10px 30px hsl(18.68deg 100% 73.06% / 15%);
+}
+
+.azsux-item-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.azsux-accordion-item.azsux-active .azsux-item-image {
+    transform: scale(1.05);
+}
+
+.azsux-item-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(0, 0, 0, 0.7) 100%);
+    transition: opacity 0.3s ease;
+}
+
+.azsux-accordion-item.azsux-active .azsux-item-overlay {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.05) 0%, rgba(0, 0, 0, 0.8) 100%);
+}
+
+/* Collapsed Item Label (Vertical Text) */
+.azsux-item-collapsed-label {
+    position: absolute;
+    bottom: 24px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    z-index: 2;
+    color: #ffffff;
+    transition: opacity 0.3s ease;
+}
+
+.azsux-accordion-item.azsux-active .azsux-item-collapsed-label {
+    opacity: 0;
+    pointer-events: none;
+}
+
+.azsux-item-num {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(4px);
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.azsux-item-text {
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    white-space: nowrap;
+}
+
+/* Active Item Card In-card content */
+.azsux-item-active-card-content {
+    position: absolute;
+    bottom: 24px;
+    left: 24px;
+    right: 24px;
+    z-index: 2;
+    color: #ffffff;
+    opacity: 0;
+    transform: translateY(12px);
+    transition: opacity 0.35s ease 0.1s, transform 0.35s ease 0.1s;
+    pointer-events: none;
+}
+
+.azsux-accordion-item.azsux-active .azsux-item-active-card-content {
+    opacity: 1;
+    transform: translateY(0);
+    pointer-events: auto;
+}
+
+.azsux-card-badge {
+    display: inline-block;
+    padding: 4px 10px;
+    background: rgba(255, 255, 255, 0.25);
+    backdrop-filter: blur(6px);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.azsux-card-title {
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0;
+    color: #ffffff;
+}
+
+/* RESPONSIVE STYLES */
+@media (max-width: 1024px) {
+    .azsux-split-layout {
+        flex-direction: column;
+    }
+    .azsux-accordion-wrapper {
+        min-height: 360px;
+    }
+    .azsux-title {
+        font-size: 26px;
+    }
+}
+
+@media (max-width: 768px) {
+    .azsux-slider-wrap {
+        height: auto !important;
+    }
+    .azsux-container {
+        padding: 20px 16px;
+    }
+    .azsux-split-layout {
+        flex-direction: column;
+        gap: 20px;
+    }
+    .azsux-accordion-wrapper {
+        flex-direction: column;
+        min-height: auto;
+    }
+    .azsux-accordion-item {
+        flex: 0 0 70px !important;
+        min-width: 100%;
+    }
+    .azsux-accordion-item.azsux-active {
+        flex: 0 0 240px !important;
+    }
+    .azsux-item-collapsed-label {
+        left: 20px;
+        bottom: 50%;
+        transform: translateY(50%);
+        flex-direction: row;
+    }
+    .azsux-item-text {
+        writing-mode: horizontal-tb;
+        transform: none;
+    }
+    .azsux-title {
+        font-size: 22px;
+    }
+    .azsux-description {
+        font-size: 14px;
+    }
+}
+
+/* Reduced Motion Accessibility */
+@media (prefers-reduced-motion: reduce) {
+    .azsux-slider-wrap,
+    .azsux-accordion-item,
+    .azsux-item-image,
+    .azsux-title,
+    .azsux-description,
+    .azsux-item-active-card-content {
+        transition: none !important;
+    }
+}

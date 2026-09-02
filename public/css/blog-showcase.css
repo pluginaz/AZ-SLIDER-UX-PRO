@@ -1,0 +1,428 @@
+/**
+ * Az Slider UX Pro — Blog Showcase Frontend Stylesheet
+ * Strictly scoped under .azsux-layout-blog-showcase
+ */
+
+.azsux-layout-blog-showcase {
+    position: relative;
+    width: 100%;
+    max-width: var(--azsux-slider-max-width, 100%);
+    margin: 0 auto;
+    min-height: var(--azsux-height, 550px);
+    border-radius: var(--azsux-radius, 0px);
+    overflow: hidden;
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    
+    --azsux-card-height: 390px;
+    --bg-card: 222.2 84% 12%;
+    --bg-dark: 222.2 84% 8%;
+    --bg-darker: 222.2 84% 4%;
+    --text-primary: 210 40% 98%;
+    --text-secondary: 215 20.2% 80.1%;
+    --text-muted: 215 16.3% 65%;
+    --border: 217.2 32.6% 22.5%;
+    --primary: 217.2 91.2% 59.8%;
+    --primary-glow: 217.2 91.2% 59.8%;
+    --font-logo: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.azsux-layout-blog-showcase *,
+.azsux-layout-blog-showcase *::before,
+.azsux-layout-blog-showcase *::after {
+    box-sizing: border-box;
+}
+
+.azsux-blog-stage-wrapper {
+    position: relative;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 50px 0;
+}
+
+.azsux-blog-stage {
+    position: relative;
+    width: 100%;
+    height: var(--azsux-card-height, 390px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    perspective: 1200px;
+    touch-action: pan-y;
+    user-select: none;
+}
+
+/* Stagger Card / Blog Card */
+.stagger-card {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    cursor: pointer;
+    border: 1px solid var(--azsux-inactive-border-color, rgba(255, 255, 255, 0.15));
+    border-radius: 20px;
+    padding: 1.5rem 1.2rem;
+    background-color: var(--azsux-inactive-bg, #ffffff) !important;
+    color: var(--azsux-inactive-text-color, #0f172a) !important;
+    transition: transform .5s cubic-bezier(.4, 0, .2, 1), opacity .5s ease, background-color .4s ease, border-color .4s ease, box-shadow .4s ease;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .03);
+    width: var(--azsux-card-width, 365px);
+    height: var(--azsux-card-height, 390px);
+    outline: none;
+    will-change: transform, opacity;
+}
+
+.stagger-card:focus-visible {
+    outline: 3px solid #3b82f6;
+    outline-offset: 3px;
+}
+
+/* Inactive Card Elements Contrast */
+.stagger-card:not(.is-center) .stagger-card-title,
+.stagger-card:not(.is-center) .stagger-card-title a {
+    color: var(--azsux-inactive-text-color, #0f172a) !important;
+}
+
+.stagger-card:not(.is-center) .stagger-card-excerpt {
+    color: var(--azsux-inactive-text-color, #0f172a) !important;
+    opacity: 0.85;
+}
+
+.stagger-card:not(.is-center) .stagger-card-meta {
+    color: var(--azsux-inactive-text-color, #0f172a) !important;
+    opacity: 0.75;
+}
+
+.stagger-card:not(.is-center) .stagger-card-tag {
+    color: var(--azsux-badge-bg, #854f2e);
+}
+
+.stagger-card:not(.is-center):hover {
+    border-color: var(--azsux-badge-bg, #854f2e);
+}
+
+/* Active Center Card (is-center) Contrast */
+.stagger-card.is-center,
+.stagger-card.azsux-active {
+    z-index: 10 !important;
+    background-color: var(--azsux-active-bg, #935b39) !important;
+    color: var(--azsux-active-text-color, #ffffff) !important;
+    border-color: var(--azsux-active-border-color, hsl(22.67deg 100% 79.38% / 29%)) !important;
+    box-shadow: var(--azsux-active-shadow, 0 10px 30px hsl(18.68deg 100% 73.06% / 15%)) !important;
+}
+
+.stagger-card.is-center .stagger-card-title,
+.stagger-card.is-center .stagger-card-title a {
+    color: var(--azsux-active-text-color, #ffffff) !important;
+}
+
+.stagger-card.is-center .stagger-card-meta {
+    color: var(--azsux-active-text-color, #ffffff) !important;
+    opacity: 0.85;
+}
+
+.stagger-card.is-center .stagger-card-excerpt {
+    color: var(--azsux-active-text-color, #ffffff) !important;
+    opacity: 0.95;
+}
+
+.stagger-card.is-center .stagger-card-img {
+    box-shadow: 3px 3px 0 rgba(0, 0, 0, 0.25);
+}
+
+.stagger-card.is-center .stagger-card-tag {
+    color: var(--azsux-active-bg, #935b39) !important;
+    background-color: var(--azsux-active-text-color, #ffffff) !important;
+    padding: .2rem .5rem;
+    border-radius: 4px;
+    font-weight: 800;
+    width: fit-content;
+}
+
+.stagger-card-corner-line {
+    display: none;
+}
+
+/* Image Thumbnail */
+.stagger-card-img {
+    margin-bottom: 1.25rem;
+    height: 4rem;
+    width: 5.5rem;
+    background-color: #1e293b;
+    object-fit: cover;
+    object-position: center;
+    box-shadow: 3px 3px 0 #0f172a;
+    border-radius: 6px;
+    transition: box-shadow .5s ease, transform .5s ease;
+}
+
+.stagger-card-img.azsux-no-image {
+    background: linear-gradient(135deg, #1e293b 0%, #334155 100%);
+}
+
+/* Tag / Category Badge */
+.stagger-card-tag {
+    display: inline-block;
+    font-size: .72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .8px;
+    margin-bottom: .75rem;
+}
+
+/* Title */
+.stagger-card-title {
+    font-family: var(--font-logo);
+    font-size: 1.15rem;
+    font-weight: 700;
+    line-height: 1.4;
+    margin: 0 0 .75rem 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Excerpt */
+.stagger-card-excerpt {
+    font-size: .85rem;
+    line-height: 1.5;
+    margin: 0 0 auto 0;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+/* Meta Footer */
+.stagger-card-meta {
+    margin-top: 1.5rem;
+    font-size: .78rem;
+    font-style: italic;
+}
+
+/* 3D POSITIONS TRANSFORMS (Chẵn / Lẻ) */
+
+/* Active Center (Position 0) */
+.stagger-card[data-position="0"] {
+    transform: translate(-50%, -35%) translateX(0px) translateY(-65px) rotate(0deg) scale(var(--azsux-active-scale, 1.05));
+    opacity: 1;
+}
+
+/* Position -1 (Lẻ - Trái 1) */
+.stagger-card[data-position="-1"] {
+    transform: translate(-50%, -50%) translateX(-243.333px) translateY(15px) rotate(2.5deg);
+    opacity: 1;
+}
+
+/* Position +1 (Lẻ - Phải 1) */
+.stagger-card[data-position="1"] {
+    transform: translate(-50%, -50%) translateX(243.333px) translateY(15px) rotate(2.5deg);
+    opacity: 1;
+}
+
+/* Position -2 (Chẵn - Trái 2) */
+.stagger-card[data-position="-2"] {
+    transform: translate(-50%, -50%) translateX(-486.667px) translateY(-15px) rotate(-2.5deg);
+    opacity: 1;
+}
+
+/* Position +2 (Chẵn - Phải 2) */
+.stagger-card[data-position="2"] {
+    transform: translate(-50%, -50%) translateX(486.667px) translateY(-15px) rotate(-2.5deg);
+    opacity: 1;
+}
+
+/* Position -3 (Lẻ - Trái 3) */
+.stagger-card[data-position="-3"] {
+    transform: translate(-50%, -50%) translateX(-730px) translateY(15px) rotate(2.5deg);
+    opacity: 1;
+}
+
+/* Position +3 (Lẻ - Phải 3) */
+.stagger-card[data-position="3"] {
+    transform: translate(-50%, -50%) translateX(730px) translateY(15px) rotate(2.5deg);
+    opacity: 1;
+}
+
+/* Out of bounds (-4, +4, etc) */
+.stagger-card[data-position="-4"],
+.stagger-card[data-position="4"],
+.stagger-card.azsux-hidden {
+    transform: translate(-50%, -50%) translateX(0) scale(0.4);
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* NAVIGATION BUTTON STYLES & POSITIONS */
+.azsux-blog-nav-btn {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: var(--azsux-arrow-bg, rgba(15, 23, 42, 0.7)) !important;
+    color: var(--azsux-arrow-color, #ffffff) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(8px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(.4, 0, .2, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, .15);
+}
+
+.azsux-blog-nav-btn svg {
+    width: 22px;
+    height: 22px;
+    stroke: var(--azsux-arrow-color, #ffffff) !important;
+    fill: none;
+    transition: transform 0.2s ease, stroke 0.2s ease;
+}
+
+.azsux-blog-nav-btn:hover {
+    background-color: var(--azsux-badge-bg, #854f2e) !important;
+    color: #ffffff !important;
+    transform: scale(1.1);
+    box-shadow: 0 8px 20px rgba(133, 79, 46, 0.4);
+}
+
+.azsux-blog-nav-btn:hover svg {
+    stroke: #ffffff !important;
+}
+
+/* Mode 1: Sides (Trái - Phải Overlay trên Stage) */
+.azsux-blog-stage-wrapper.azsux-nav-pos-sides .azsux-blog-nav-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+}
+
+.azsux-blog-stage-wrapper.azsux-nav-pos-sides .azsux-blog-nav-prev {
+    left: 20px;
+}
+
+.azsux-blog-stage-wrapper.azsux-nav-pos-sides .azsux-blog-nav-next {
+    right: 20px;
+}
+
+.azsux-blog-stage-wrapper.azsux-nav-pos-sides .azsux-blog-nav-btn:hover {
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* Mode 2: Navigation Bar (Top / Bottom) */
+.azsux-blog-nav-bar {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+    z-index: 25;
+}
+
+.azsux-blog-nav-bar .azsux-blog-nav-btn {
+    position: relative;
+    top: auto;
+    left: auto;
+    right: auto;
+    transform: none;
+}
+
+/* Alignment Classes */
+.azsux-nav-bar-top-center,
+.azsux-nav-bar-bottom-center {
+    justify-content: center;
+}
+
+.azsux-nav-bar-top-left,
+.azsux-nav-bar-bottom-left {
+    justify-content: flex-start;
+    padding-left: 20px;
+}
+
+.azsux-nav-bar-top-right,
+.azsux-nav-bar-bottom-right {
+    justify-content: flex-end;
+    padding-right: 20px;
+}
+
+/* Top Margin & Bottom Padding for Top/Bottom Navigation */
+.azsux-blog-nav-bar[class*="top-"] {
+    margin-bottom: 24px;
+}
+
+.azsux-blog-nav-bar[class*="bottom-"] {
+    margin-top: 36px;
+    padding-top: 10px;
+}
+
+/* RESPONSIVE BREAKPOINTS */
+@media (max-width: 1024px) {
+    .stagger-card[data-position="-1"] {
+        transform: translate(-50%, -50%) translateX(-180px) translateY(10px) rotate(-2deg) scale(0.9);
+    }
+    .stagger-card[data-position="1"] {
+        transform: translate(-50%, -50%) translateX(180px) translateY(10px) rotate(2deg) scale(0.9);
+    }
+    .stagger-card[data-position="-2"] {
+        transform: translate(-50%, -50%) translateX(-360px) translateY(-10px) rotate(-2.5deg) scale(0.8);
+    }
+    .stagger-card[data-position="2"] {
+        transform: translate(-50%, -50%) translateX(360px) translateY(-10px) rotate(-2.5deg) scale(0.8);
+    }
+    .stagger-card[data-position="-3"],
+    .stagger-card[data-position="3"] {
+        opacity: 0;
+        pointer-events: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .azsux-blog-stage {
+        height: 360px;
+    }
+    .stagger-card {
+        width: 300px;
+        height: 350px;
+        padding: 1.5rem 1.2rem;
+    }
+    .stagger-card[data-position="0"] {
+        transform: translate(-50%, -40%) scale(1.02);
+    }
+    .stagger-card[data-position="-1"] {
+        transform: translate(-50%, -50%) translateX(-120px) scale(0.85);
+        opacity: 0.4;
+    }
+    .stagger-card[data-position="1"] {
+        transform: translate(-50%, -50%) translateX(120px) scale(0.85);
+        opacity: 0.4;
+    }
+    .stagger-card[data-position="-2"],
+    .stagger-card[data-position="2"],
+    .stagger-card[data-position="-3"],
+    .stagger-card[data-position="3"] {
+        opacity: 0;
+        pointer-events: none;
+    }
+    .azsux-blog-stage-wrapper.azsux-nav-pos-sides .azsux-blog-nav-prev {
+        left: 8px;
+    }
+    .azsux-blog-stage-wrapper.azsux-nav-pos-sides .azsux-blog-nav-next {
+        right: 8px;
+    }
+}
+
+/* REDUCED MOTION ACCESSIBILITY */
+@media (prefers-reduced-motion: reduce) {
+    .stagger-card,
+    .stagger-card-img,
+    .azsux-blog-nav-btn {
+        transition: none !important;
+        transform: translate(-50%, -50%) !important;
+    }
+}
