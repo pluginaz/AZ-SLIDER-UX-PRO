@@ -4,7 +4,7 @@ Tags: slider, accordion, showcase, flatsome, builder
 Requires at least: 6.4
 Tested up to: 7.1
 Requires PHP: 7.4
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -28,6 +28,11 @@ Az Slider UX Pro is a modern slider and accordion showcase solution for WordPres
 3. Create a new slider under the "Az Slider UX" menu and embed it via shortcode or Flatsome UX Builder element.
 
 == Changelog ==
+
+= 1.0.2 =
+* Fixed Flatsome UX Builder live iframe preview, asset loading, and real-time element re-initialization.
+* Fixed method signature in AZSUX_Blog_Query (build_query_args, query_posts).
+* Resolved WordPress Plugin Check & PHPCS compliance warnings and non-enqueued stylesheets.
 
 = 1.0.1 =
 * Added Blog Showcase module with dynamic WP_Query, 3D center fan card layouts, and responsive controls.
